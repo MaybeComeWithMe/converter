@@ -7,19 +7,27 @@ All requirements for this project you can read [here](Тестовое%20зад�
 ## Before start
 Change properties in [application.yml](src/main/resources/application.yml).
 Add your DB driver to [pom.xml](pom.xml).
+In this case we use MySQL DB.
 
 Make sure you set a right credentials for DB connection and n.
 
 
 ```yml
-url: "jdbc:mysql://localhost:3306/TEST"
+url: "jdbc:mysql://localhost:3306/TEST?rewriteBatchedStatements=true"
 username: "root"
 password: "password"
 driver: "com.mysql.jdbc.Driver"
 
 n: 10000
 ```
-## Links
+## Read more about libraries
+[Yml parser](https://www.javadoc.io/doc/org.yaml/snakeyaml/1.19/org/yaml/snakeyaml/Yaml.html).
+
+[Java Architecture for XML Binding](https://docs.oracle.com/javase/8/docs/api/javax/xml/bind/JAXB.html).
+
+[Transforming XML via XSLT](https://docs.oracle.com/javase/tutorial/jaxp/xslt/transformingXML.html).
+
+## Links with samples of usage
 [Yml parser sample](https://www.baeldung.com/java-snake-yaml).
 
 [Creating XML based on entity sample](https://howtodoinjava.com/jaxb/jaxb-exmaple-marshalling-and-unmarshalling-list-or-set-of-objects/).

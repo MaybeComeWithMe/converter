@@ -12,7 +12,7 @@ import java.util.List;
 public interface QueryExecutor {
     void prepareTable() throws SQLException;
 
-    void insertValues(Long n);
+    void insertValues(Long n) throws SQLException;
 
     List<XMLField> getValues() throws SQLException;
 }

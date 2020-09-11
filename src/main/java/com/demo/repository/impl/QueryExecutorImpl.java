@@ -15,15 +15,17 @@ public class QueryExecutorImpl implements QueryExecutor {
 
     private final String DROP_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS `TEST`;";
     private final String CREATE_TABLE = "CREATE TABLE `TEST` (FIELD BIGINT);";
-    private final String INSERT_TABLE_DATA = "INSERT INTO `TEST` (`FIELD`) VALUES ('%d')";
+    private final String INSERT_TABLE_DATA = "INSERT INTO `TEST` (`FIELD`) VALUES (?)";
     private final String SELECT_TABLE_DATA = "SELECT test.field as field FROM `TEST` test;";
 
 
     private Statement statement = null;
+    private PreparedStatement preparedStatement = null;
 
     public QueryExecutorImpl(Connection connection) {
         try {
             statement = connection.createStatement();
+            preparedStatement = connection.prepareStatement(INSERT_TABLE_DATA);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -38,24 +40,26 @@ public class QueryExecutorImpl implements QueryExecutor {
     }
 
     @Override
-    public void insertValues(Long n) {
-        Integer number = 1;
+    public void insertValues(Long n) throws SQLException {
+        Long number = 1L;
         while (number <= n) {
             try {
-                statement.addBatch(String.format(INSERT_TABLE_DATA, number));
-                if (n > 500) {
-                    if (number % 500 == 0) {
-                        statement.executeLargeBatch();
+                preparedStatement.setLong(1, number);
+                preparedStatement.addBatch();
+                if (n > 5000) {
+                    if (number % 5000 == 0) {
+                        preparedStatement.executeBatch();
                     }
                     number++;
                 } else {
                     number++;
-                    statement.executeLargeBatch();
+                    preparedStatement.executeBatch();
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
         }
+        preparedStatement.close();
     }
 
     @Override

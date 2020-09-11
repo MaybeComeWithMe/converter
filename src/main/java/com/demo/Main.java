@@ -57,10 +57,14 @@ public class Main {
 
         List<XMLField> list = null;
         try {
+            long execStart = System.currentTimeMillis();
             queryExecutor.prepareTable();
             queryExecutor.insertValues(dbConnector.getN());
             list = queryExecutor.getValues();
+            long execFinish = System.currentTimeMillis();
+            System.out.println(String.format("Execution queries to DB took: %d ms;", (execFinish - execStart)));
         } catch (SQLException throwables) {
+            System.out.println("Couldn't execute queries !");
             throwables.printStackTrace();
         } finally {
             dbConnector.closeConnection();
@@ -73,6 +77,7 @@ public class Main {
         try {
             xmlBuilder.build(list);
         } catch (JAXBException | TransformerException e) {
+            System.out.println("XML file building error!");
             e.printStackTrace();
         }
 
@@ -83,6 +88,7 @@ public class Main {
         try {
             xsltConvertor.convert();
         } catch (TransformerException e) {
+            System.out.println("XML file converting error!");
             e.printStackTrace();
         }
 
@@ -93,6 +99,7 @@ public class Main {
         try {
             parser.parse();
         } catch (ParserConfigurationException | SAXException | IOException e) {
+            System.out.println("XML file parsing error!");
             e.printStackTrace();
         }
 
